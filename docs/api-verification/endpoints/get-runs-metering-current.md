@@ -246,11 +246,9 @@ In addition to the general edge cases above, the following are specific to the `
 
 ## Related Documentation
 
-| Document | Link | Description |
-|----------|------|-------------|
-| Verification Overview | [Back to Verification Overview](../overview.md) | Scope summary and verification workflow |
-| Consolidated Guide | [Consolidated percent_complete Guide](../metering-percent-complete.md) | All three APIs, trigger-action matrix, cross-API consistency |
-| GET /runs/metering | [GET /runs/metering — Endpoint Guide](get-runs-metering.md) | Companion endpoint for historical run metering |
-| GET /project | [GET /project — Endpoint Guide](get-project.md) | Project endpoint with inline metering data |
-| DevTools Guide | [DevTools API Inspection Guide](../../guides/devtools-api-inspection.md) | Browser verification workflow |
-| Validation & Test Cases | [Validation Matrix & Test Cases](../../test-cases/percent-complete-validation.md) | Comprehensive test scenarios |
+- [Back to Verification Overview](../overview.md) — Scope summary and verification workflow
+- [Consolidated percent_complete Guide](../metering-percent-complete.md) — All three APIs, trigger-action matrix, cross-API consistency
+- [GET /runs/metering — Endpoint Guide](get-runs-metering.md) — Companion endpoint for historical run metering
+- [GET /project — Endpoint Guide](get-project.md) — Project endpoint with inline metering data
+- [DevTools API Inspection Guide](../../guides/devtools-api-inspection.md) — Browser verification workflow
+- [Validation Matrix & Test Cases](../../test-cases/percent-complete-validation.md) — Comprehensive test scenarios

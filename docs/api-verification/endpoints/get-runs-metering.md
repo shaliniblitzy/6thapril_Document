@@ -88,7 +88,10 @@ The response contains metering data for **multiple runs** associated with the sp
 | **Null Allowed** | Yes — `null` when no data available |
 | **Location in Response** | Inside each run object in the `runs` array |
 
-> **Data Type Clarification:** The value `"50"` (a string) is **INVALID**, while `50` or `50.0` (a number) is **VALID**. The field must always contain a numeric type — never a string representation of a number.
+**Data type clarification:**
+
+- `50` or `50.0` (number) → ✅ **VALID**
+- `"50"` (string) → ❌ **INVALID** — the value must always be a numeric type, never a string representation of a number
 
 > **Naming Convention Note:** Both field name variants (`percent_complete` and `percentComplete`) must be checked. The user requirements explicitly identify field name inconsistency between `percent_complete` and `percentComplete` as a potential issue to verify. If this endpoint uses a different naming convention than the other two endpoints (`GET /runs/metering/current` and `GET /project`), this is a ⚠️ **naming inconsistency** that should be flagged and investigated.
 
@@ -125,7 +128,7 @@ The following expanded table provides specific test scenarios for the `GET /runs
 
 The following sample JSON responses illustrate valid and invalid scenarios for the `GET /runs/metering` endpoint. Use these as reference when inspecting actual API responses in the browser DevTools Network tab.
 
-### Sample 1: ✅ Valid — Completed run
+### ✅ Sample 1: Completed run
 
 A completed code generation run with `percent_complete` at `100.0`:
 
@@ -144,7 +147,7 @@ A completed code generation run with `percent_complete` at `100.0`:
 }
 ```
 
-### Sample 2: ✅ Valid — Null value (no data)
+### ✅ Sample 2: Null value (no data)
 
 A pending run where progress data is not yet available:
 
@@ -163,7 +166,7 @@ A pending run where progress data is not yet available:
 }
 ```
 
-### Sample 3: ✅ Valid — In-progress run
+### ✅ Sample 3: In-progress run
 
 An actively running code generation run at 45.5% completion:
 
@@ -182,7 +185,7 @@ An actively running code generation run at 45.5% completion:
 }
 ```
 
-### Sample 4: ❌ Invalid — Field missing (bug indicator)
+### ❌ Sample 4: Invalid — field missing (bug indicator)
 
 The `percent_complete` field is entirely absent from the run object — **this is a bug:**
 
@@ -202,7 +205,7 @@ The `percent_complete` field is entirely absent from the run object — **this i
 
 > **Bug:** Note that `percent_complete` is entirely missing from the run object. The field must always be present in every run object in the response — its absence indicates a defect in the API implementation.
 
-### Sample 5: ❌ Invalid — Wrong data type (string instead of number)
+### ❌ Sample 5: Invalid — wrong data type (string instead of number)
 
 The `percent_complete` value is a string `"100"` instead of a number — **this is a bug:**
 
@@ -222,6 +225,41 @@ The `percent_complete` value is a string `"100"` instead of a number — **this 
 ```
 
 > **Bug:** The value `"100"` is a string, not a number — this is a bug. The correct value should be `100` or `100.0` (numeric type). String representations of numbers are never valid for this field.
+
+### ✅ Sample 6: Multiple runs with mixed states
+
+A multi-run response with runs in different states, illustrating the array structure with mixed `percent_complete` values:
+
+```json
+{
+  "projectId": "abc-123-def-456",
+  "runs": [
+    {
+      "runId": "run-010",
+      "status": "completed",
+      "percent_complete": 100.0,
+      "startedAt": "2024-01-15T08:00:00Z",
+      "completedAt": "2024-01-15T08:20:00Z"
+    },
+    {
+      "runId": "run-011",
+      "status": "running",
+      "percent_complete": 45.5,
+      "startedAt": "2024-01-15T10:00:00Z",
+      "completedAt": null
+    },
+    {
+      "runId": "run-012",
+      "status": "pending",
+      "percent_complete": null,
+      "startedAt": "2024-01-15T12:00:00Z",
+      "completedAt": null
+    }
+  ]
+}
+```
+
+> **Multi-run validation:** When the response contains multiple runs, verify that **every** run object in the `runs` array contains a valid `percent_complete` field. In this example, run-010 (completed) has `100.0`, run-011 (running) has `45.5`, and run-012 (pending) has `null` — all are valid values for their respective run states.
 
 ---
 
