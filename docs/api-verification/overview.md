@@ -105,13 +105,15 @@ graph TD
 
     H --> I{Field found?}
     I -- No --> X1[❌ Bug:<br>Field missing]
-    I -- Yes --> J{Data type<br>is numeric?}
+    I -- Yes --> J{Is value null?}
+    J -- Yes --> V1[✅ Valid — null<br>No data scenario]
+    J -- No --> K{Data type<br>is numeric?}
 
-    J -- No --> X2[❌ Bug:<br>Wrong data type]
-    J -- Yes --> K{Value is<br>0.0–100.0 or null?}
+    K -- No --> X2[❌ Bug:<br>Wrong data type]
+    K -- Yes --> K1{Value is<br>0.0–100.0?}
 
-    K -- No --> X3[❌ Bug:<br>Out of range]
-    K -- Yes --> L[✅ Valid —<br>Record result]
+    K1 -- No --> X3[❌ Bug:<br>Out of range]
+    K1 -- Yes --> L[✅ Valid —<br>Record result]
 
     L --> M{More endpoints<br>to verify?}
     M -- Yes --> D

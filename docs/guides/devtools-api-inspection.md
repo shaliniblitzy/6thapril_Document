@@ -208,11 +208,13 @@ graph TD
     G --> H[Search for percent_complete /<br>percentComplete using Ctrl+F]
     H --> I{Field found?}
     I -- No --> X1[❌ Bug: Field missing<br>from response]
-    I -- Yes --> J{Data type numeric?}
-    J -- No --> X2[❌ Bug: Wrong data type<br>Expected number, not string]
-    J -- Yes --> K{Value 0.0–100.0<br>or null?}
-    K -- No --> X3[❌ Bug: Value out<br>of valid range]
-    K -- Yes --> L[✅ Valid — Record result]
+    I -- Yes --> J{Is value null?}
+    J -- Yes --> V1[✅ Valid — null value<br>No data scenario]
+    J -- No --> K{Data type numeric?}
+    K -- No --> X2[❌ Bug: Wrong data type<br>Expected number, not string]
+    K -- Yes --> K1{Value 0.0–100.0?}
+    K1 -- No --> X3[❌ Bug: Value out<br>of valid range]
+    K1 -- Yes --> L[✅ Valid — Record result]
     L --> M{More endpoints<br>to verify?}
     M -- Yes --> E
     M -- No --> N[End: All endpoints verified<br>Check cross-API consistency]

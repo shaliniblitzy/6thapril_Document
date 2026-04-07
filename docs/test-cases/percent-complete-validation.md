@@ -189,11 +189,11 @@ Use the following decision tree to validate the `percent_complete` / `percentCom
 graph TD
     A[Start: Inspect API Response] --> B{Is percent_complete /<br>percentComplete field present?}
     B -- No --> X1[❌ Bug: Field missing<br>from response]
-    B -- Yes --> C{What is the data type<br>of the value?}
-    C -- Not numeric --> X2[❌ Bug: Wrong data type<br>Expected: number]
-    C -- Numeric --> D{Is the value null?}
-    D -- Yes --> V1[✅ Valid<br>No data scenario]
-    D -- No --> E{Is value >= 0.0?}
+    B -- Yes --> C{Is the value null?}
+    C -- Yes --> V1[✅ Valid<br>No data scenario]
+    C -- No --> D{Is the data type<br>numeric?}
+    D -- Not numeric --> X2[❌ Bug: Wrong data type<br>Expected: number]
+    D -- Numeric --> E{Is value >= 0.0?}
     E -- No --> X3[❌ Bug: Value below<br>lower bound 0.0]
     E -- Yes --> F{Is value <= 100.0?}
     F -- No --> X4[❌ Bug: Value exceeds<br>upper bound 100.0]
